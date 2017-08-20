@@ -8,5 +8,6 @@
 #   the name metastore.
 #
 
-sd_id, tbl_name = subprocess.check_output(['psql', '-U metastore -e "select "SD_ID","TBL_NAME" from "TBLS" where "TBL_TYPE" = \'MANAGED_TABLE\';"'])
-print sd_id, tbl_name
+p = subprocess.Popen(['psql',
+                      '-t -U metastore -e "select \"SD_ID\",\"TBL_NAME\" from \"TBLS\" where \"TBL_TYPE\" = 'MANAGED_TABLE';"'])
+print p.communicate()
