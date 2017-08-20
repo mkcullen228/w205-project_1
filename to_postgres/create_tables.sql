@@ -37,6 +37,8 @@ CREATE TABLE  weblog
   time_taken_ms BIGINT,
   visitor_id_hash VARCHAR
  );
+
+ALTER TABLE weblog OWNER TO hiveuser;
 --
 -- Filtering R = (Robot, crawler, spider); S = (Spam or bad bot) User-Agents from weblogs (see User-Agents.org)
 --
@@ -44,6 +46,8 @@ CREATE TABLE  weblog_user_agents
  (     
   cs_user_agent VARCHAR
  );
+ALTER TABLE weblog_user_agents OWNER TO hiveuser;
+
 
 CREATE TABLE  user_agent_bots_spiders
  (
@@ -52,11 +56,15 @@ CREATE TABLE  user_agent_bots_spiders
   description VARCHAR,
   type VARCHAR
  );
+ALTER TABLE user_agent_bots_spiders OWNER TO hiveuser;
+
 
 CREATE TABLE  user_agent_exclusion
  (
    user_agent VARCHAR
  );
+ALTER TABLE user_agent_exclusion OWNER TO hiveuser;
+
 
 CREATE TABLE  weblog_filtered
  (
@@ -82,6 +90,8 @@ CREATE TABLE  weblog_filtered
   user_agent VARCHAR
  );
 
+ALTER TABLE weblog_filtered OWNER TO hiveuser;
+
 --
 --Create Table for Model Page Views
 --
@@ -89,9 +99,11 @@ CREATE TABLE  visitor_model_view
  (
   mt_date DATE,
   visitor_id_hash VARCHAR,
-  model_id INT,
+  model_id VARCHAR,
   model_views BIGINT
  );
+ALTER TABLE visitor_model_view OWNER TO hiveuser;
+
 --
 --Create Table to Track Add to Carts (atc)
 --
@@ -99,7 +111,8 @@ CREATE TABLE  visitor_model_atc
  (
   mt_date DATE,
   visitor_id_hash VARCHAR,
-  model_id INT,
-  product_id INT,
+  model_id VARCHAR,
+  product_id VARCHAR,
   model_atc BIGINT
  );
+ALTER TABLE visitor_model_atc OWNER TO hiveuser;
