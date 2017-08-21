@@ -11,20 +11,11 @@ SET fs.s3.awsAccessKeyId=INSERT ACCESS KEY FROM AWS ACCOUNT HERE;- #For XML clas
 --once as root: $chmod 777 hivexmlserde-1.0.5.3.jar
 add jar /usr/lib/hadoop-0.20-mapreduce/lib/hivexmlserde-1.0.5.3.jar;
 
--- #For Product Catalog xml file:
---once as root: $pip install awscli (From <http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html>)
---as w205: 
---once-- $ aws configure
---				AWS Access Key ID [None]: INSERT ACCESS KEY FROM AWS ACCOUNT HERE
---				AWS Secret Access Key [None]: INSERT ACCESS KEY FROM AWS ACCOUNT HERE
---				Default region name [None]: us-east-1
---				Default output format [None]:None
---once as w205-- $aws s3 cp s3://midsw205project1/product_catalog/eBags_Products_20170705_115248.xml /home/w205/project_1
---once as w205-- $hdfs dfs -put /home/w205/project_1/eBags_Products_20170705_115248.xml /user/w205/project_1/product_catalog/eBags_Products_20170705_115248.xml
 
 --
 --  Product Catalog
 --
+
 DROP TABLE IF EXISTS product_catalog_xml_raw;
 CREATE EXTERNAL TABLE product_catalog_xml_raw 
 (model_id STRING, status STRING, brand STRING, description STRING, images STRING, features STRING, attributes STRING, facets STRING, product_rating STRING, master_category STRING, sub_category STRING,
@@ -48,7 +39,7 @@ CREATE EXTERNAL TABLE product_catalog_xml_raw
  )
  STORED AS INPUTFORMAT 'com.ibm.spss.hive.serde2.xml.XmlInputFormat'
  OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.IgnoreKeyTextOutputFormat'
-  LOCATION '/user/w205/project_1/product_catalog'
+  LOCATION 's3://midsw205project1/product_catalog'
   TBLPROPERTIES ("xmlinput.start"="<ProductCatalogItem>","xmlinput.end"= "</ProductCatalogItem>");
   
 select * from product_catalog_xml_raw where model_id='1_1';
@@ -122,7 +113,7 @@ SELECT cast(model_id as int) as model_id, cast(min(model_price_group) as int) as
 FROM model_facets
 GROUP BY model_id, model_price_group, facet_name, facet_value;
 DROP TABLE model_facets;
--->
+
 DROP TABLE IF EXISTS model_grouped;
 CREATE TABLE model_grouped AS
 SELECT cast(regexp_extract(model_id,'(\\d+)_\\d+') as int) as model_id, 
@@ -132,9 +123,7 @@ SELECT cast(regexp_extract(model_id,'(\\d+)_\\d+') as int) as model_id,
   max(master_category) as master_category, max(sub_category) as sub_category, max(model_url) as model_url,
   cast(min(review_count) as int) as review_count, cast(min(color_count) as int) as color_count
 FROM product_catalog_xml_raw
-GROUP BY regexp_extract(model_id,'(\\d+)_\\d+');
-
-
+GROUP BY cast(regexp_extract(model_id,'(\\d+)_\\d+') as int);
 
 DROP TABLE IF EXISTS model_image_count;
 CREATE TABLE model_image_count AS
@@ -212,5 +201,4 @@ WHERE model_id='1' AND model_price_group = '1';
 
 SELECT * FROM model_facets
 WHERE model_id='1' AND model_price_group = '1';
-
 
