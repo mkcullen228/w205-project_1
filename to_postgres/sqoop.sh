@@ -12,28 +12,41 @@
 #
 #   Import the weblog data from HDFS
 #
-sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/ebags_weblog --username hiveuser --password w205  --input-fields-terminated-by "\t" --export-dir=hdfs://localhost:8020/user/hive/warehouse/weblog/ --table=weblog
+sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/ebags_weblog \
+       --username hiveuser --input-fields-terminated-by "\t" --export-dir=hdfs://localhost:8020/user/hive/warehouse/weblog/ --table=weblog
 #
 #   Import weblog user agent information from HDFS
 #
-sqoop export --input-null-string '\\N' --input-null-non-string '\\N'  --connect jdbc:postgresql://localhost/ebags_weblog --username hiveuser --password w205  --input-fields-terminated-by "\t" --export-dir=hdfs://localhost:8020/user/hive/warehouse/weblog_user_agents/ --table=weblog_user_agents
+sqoop export --input-null-string '\\N' --input-null-non-string '\\N'  --connect jdbc:postgresql://localhost/ebags_weblog \
+    --username hiveuser --input-fields-terminated-by "\t" --export-dir=hdfs://localhost:8020/user/hive/warehouse/weblog_user_agents/ \
+    --table=weblog_user_agents
 #
 #   Import weblog bots and spiders information from HDFS
 #
-sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/ebags_weblog --username hiveuser --password w205  --input-fields-terminated-by "\t" --export-dir=hdfs://localhost:8020/user/hive/warehouse/user_agent_bots_spiders/ --table=user_agent_bots_spiders
+sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/ebags_weblog \
+    --username hiveuser --input-fields-terminated-by "\t" --export-dir=hdfs://localhost:8020/user/hive/warehouse/user_agent_bots_spiders/ \
+    --table=user_agent_bots_spiders
 #
 #   Import user agent exclusion information from HDFS
 #
-sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/ebags_weblog --username hiveuser --password w205  --input-fields-terminated-by "\t" --export-dir=hdfs://localhost:8020/user/hive/warehouse/user_agent_exclusion/ --table=user_agent_exclusion
+sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/ebags_weblog \
+    --username hiveuser --input-fields-terminated-by "\t" --export-dir=hdfs://localhost:8020/user/hive/warehouse/user_agent_exclusion/ \
+    --table=user_agent_exclusion
 #
 #   Import filtered weblog data from HDFS
 #
-sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/ebags_weblog --username hiveuser --password w205 --input-fields-terminated-by "\001" --export-dir=hdfs://localhost:8020/user/hive/warehouse/weblog_filtered/ --table=weblog_filtered
+sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/ebags_weblog \
+    --username hiveuser --input-fields-terminated-by "\001" --export-dir=hdfs://localhost:8020/user/hive/warehouse/weblog_filtered/ \
+    --table=weblog_filtered
 #
 #    Import visitor information from HDFS
 #
-sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/ebags_weblog --username hiveuser --password w205 --input-fields-terminated-by "\001" --export-dir=hdfs://localhost:8020/user/hive/warehouse/visitor_model_view/ --table=visitor_model_view
+sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/ebags_weblog \
+    --username hiveuser --input-fields-terminated-by "\001" --export-dir=hdfs://localhost:8020/user/hive/warehouse/visitor_model_view/ \
+    --table=visitor_model_view
 #
 #    Import visitor information with models from HDFS
 #
-sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/ebags_weblog --username hiveuser --password w205 --input-fields-terminated-by "\001" --export-dir=hdfs://localhost:8020/user/hive/warehouse/visitor_model_atc/ --table=visitor_model_atc
+sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/ebags_weblog \
+    --username hiveuser --input-fields-terminated-by "\001" --export-dir=hdfs://localhost:8020/user/hive/warehouse/visitor_model_atc/ \
+    --table=visitor_model_atc
