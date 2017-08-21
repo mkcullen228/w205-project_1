@@ -1,21 +1,23 @@
--- #For XML classes:
---once- cd /usr/lib/hadoop/lib
---once- wget -o hivexmlserde-1.0.5.3.jar http://search.maven.org/remotecontent?filepath=com/ibm/spss/hive/serde2/xml/hivexmlserde/1.0.5.3/hivexmlserde-1.0.5.3.jar
---once- chmod 777 hivexmlserde-1.0.5.3.jar
-add jar /usr/lib/hadoop-0.20-mapreduce/lib/hivexmlserde-1.0.5.3.jar;
---
--- #For user-agents.org data
---once- cd /home/w205/project_1
---once- wget http://www.user-agents.org/allagents.xml
---once- hdfs dfs -mkdir /user/w205/project_1
---once- hdfs dfs -mkdir /user/w205/project_1/user-agents
---once- hdfs dfs -put "/home/w205/project_1/allagents.xml" /user/w205/project_1/user-agents/allagents.xml
---
--- #For Amazon S3 library access
---each- Set HADOOP_CLASSPATH=/usr/lib/hadoop/client (export HADOOP_CLASSPATH=/usr/lib/hadoop/client)
+-- #For Amazon S3 library access (as user w205)
+--once as w205: $export HADOOP_CLASSPATH=/usr/lib/hadoop/client
+--run hive as w205:
 SET fs.s3.impl=org.apache.hadoop.fs.s3native.NativeS3FileSystem;
 SET fs.s3.awsSecretAccessKey=INSERT SECRET ACCESS KEY FROM AWS ACCOUNT HERE;
-SET fs.s3.awsAccessKeyId=INSERT ACCESS KEY FROM AWS ACCOUNT HERE;
+SET fs.s3.awsAccessKeyId=INSERT ACCESS KEY FROM AWS ACCOUNT HERE;- #For XML classes (as root):
+
+-- #For XML classes:
+--once- cd /usr/lib/hadoop-0.20-mapreduce/lib
+--once as root: $wget -O hivexmlserde-1.0.5.3.jar http://search.maven.org/remotecontent?filepath=com/ibm/spss/hive/serde2/xml/hivexmlserde/1.0.5.3/hivexmlserde-1.0.5.3.jar
+--once as root: $chmod 777 hivexmlserde-1.0.5.3.jar
+add jar /usr/lib/hadoop-0.20-mapreduce/lib/hivexmlserde-1.0.5.3.jar;
+
+--
+-- #For user-agents.org data
+--once as w205: $cd /home/w205/project_1
+--once as w205: $wget http://www.user-agents.org/allagents.xml
+--once as w205: $hdfs dfs -mkdir /user/w205/project_1
+--once as w205: $hdfs dfs -mkdir /user/w205/project_1/user-agents
+--once as w205: $hdfs dfs -put "/home/w205/project_1/allagents.xml" /user/w205/project_1/user-agents/allagents.xml
 
 
 --Create base schema
@@ -129,7 +131,7 @@ CREATE EXTERNAL TABLE USER_AGENTS (ID STRING, Signature STRING, Description STRI
  )
  STORED AS INPUTFORMAT 'com.ibm.spss.hive.serde2.xml.XmlInputFormat'
  OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.IgnoreKeyTextOutputFormat'
- LOCATION '/user/w205/project_1/user-agents/allagents.xml/'
+ LOCATION '/user/w205/project_1/user-agents/'
  TBLPROPERTIES ("xmlinput.start"="<user-agent>","xmlinput.end"= "</user-agent>");
  
  SELECT count(*) FROM USER_AGENTS;
@@ -168,7 +170,7 @@ SELECT lower(wua.cs_user_agent) user_agent FROM weblog_user_agents wua CROSS JOI
 
 SELECT count(*) from user_agent_exclusion;
 --OK
---4
+--16
 
 --
 DROP TABLE IF EXISTS weblog_filtered;
