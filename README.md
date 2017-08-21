@@ -1,6 +1,6 @@
 # w205-project_1
 
-Operating Instructions:
+Operating Instructions:  
 1.)  Create and/or launch MIDS 205 AMI instance on instance type m3.Large or better
 (Detailed Instructions in Lab 1 Here: https://github.com/UC-Berkeley-I-School/w205-summer-17-labs-exercises/blob/master/lab_1/Lab1-w205.md)
 
