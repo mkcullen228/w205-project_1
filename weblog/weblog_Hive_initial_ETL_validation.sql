@@ -2,8 +2,9 @@
 SET fs.s3.impl=org.apache.hadoop.fs.s3native.NativeS3FileSystem;
 
 -- Find the following in your AWS account under Security Credentials, Access Keys (you may need to generate one)
-SET fs.s3.awsSecretAccessKey=INSERT YOUR SECRET KEY HERE;
-SET fs.s3.awsAccessKeyId=INSERT YOUR ACCESS ID HERE;
+
+SET fs.s3.awsSecretAccessKey=INSERT YOUR OWN SECRET KEY HERE;
+SET fs.s3.awsAccessKeyId=INSERT YOUR OWN ACCESS KEY HERE;
 
 --Create base schema
 
@@ -90,8 +91,6 @@ FROM
 
 --weblog Validations and explorations
 SELECT count(*) from weblog;
-OK
-7790143
 
 SELECT cs_user_agent, count(*) as ct
 FROM weblog
@@ -99,9 +98,6 @@ GROUP BY cs_user_agent
 ORDER BY ct DESC;
 
 SELECT count(*) from weblog where lower(cs_user_agent) not like '%bot%';
-OK
-6074339
-
 
 --
 --Create Table for Model Page Views
@@ -121,16 +117,10 @@ CREATE TABLE visitor_model_view AS SELECT
 
 --visitor_model_ view Validations and explorations
 SELECT count(*) FROM weblog WHERE (lower(cs_uri_stem) like '/product/%' or lower(cs_uri_stem) like '/hproduct/%') and lower(cs_user_agent) not like '%bot%';
-OK
-3913851
 
 SELECT sum(model_views) FROM visitor_model_view;
-OK
-3913851
 
 SELECT sum(model_views) FROM visitor_model_view where model_id is NULL;
-OK
-3594
 
 SELECT model_id, sum(model_views) as ct
 FROM visitor_model_view 
@@ -165,16 +155,10 @@ CREATE TABLE visitor_model_atc AS SELECT
 
 --visitor_model_atc Validations and explorations
 SELECT count(*) FROM weblog WHERE (lower(cs_uri_stem) = '/api/cart/product/add' or lower(cs_uri_stem) = '/cart/add') and lower(cs_user_agent) not like '%bot%';
-OK
-352935
 
 SELECT sum(model_atc) FROM visitor_model_atc;
-OK
-349876
 
 SELECT sum(model_atc) FROM visitor_model_atc where model_id is NULL;
-OK
-3405
 
 SELECT model_id, sum(model_atc) as ct
 FROM visitor_model_atc 
