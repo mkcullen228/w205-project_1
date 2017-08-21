@@ -99,7 +99,7 @@ CREATE TABLE  visitor_model_view
  (
   mt_date DATE,
   visitor_id_hash VARCHAR,
-  model_id VARCHAR,
+  model_id INT,
   model_views BIGINT
  );
 ALTER TABLE visitor_model_view OWNER TO hiveuser;
@@ -111,8 +111,8 @@ CREATE TABLE  visitor_model_atc
  (
   mt_date DATE,
   visitor_id_hash VARCHAR,
-  model_id VARCHAR,
-  product_id VARCHAR,
+  model_id INT,
+  product_id INT,
   model_atc BIGINT
  );
 ALTER TABLE visitor_model_atc OWNER TO hiveuser;
