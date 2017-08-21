@@ -1,6 +1,9 @@
 # w205-project_1
 
-Operating Instructions:  
+Operating Instructions:   
+
+Important:  You will not be able to access the files on S3 unless you have provided your Amazon Cannonical User ID - the 64 character user id found in AWS under "My Security Credentials" under the "Account Identifiers" section.  More information on this can be found here: http://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html  Please email one of the project group members with your name and a request for access and your request will be addressed as soon as possible.  You will also need to set Access Keys in the Hive ETL scripts that process the data from the Amazon AWS S3 cloud.  Access keys are created and managed under "My Security Credentials" under the "Access Keys" section.  Very Important: Amazon AWS Access Keys should be kept secure and not shared.  For more information on Access Keys, see this link: http://docs.aws.amazon.com/general/latest/gr/aws-access-keys-best-practices.html   
+
 1.)  Create and/or launch MIDS 205 AMI instance on instance type m3.Large or better
 (Detailed Instructions in Lab 1 Here: https://github.com/UC-Berkeley-I-School/w205-summer-17-labs-exercises/blob/master/lab_1/Lab1-w205.md)
 
