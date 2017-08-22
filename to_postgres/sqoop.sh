@@ -18,41 +18,41 @@ HiveHDFS = hdfs://localhost:8020/user/hive/warehouse
 #
 #   Next import weblog data from HDFS
 #
-sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/ebags_weblog \
+sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/prod_cat_stats \
        --username hiveuser --input-fields-terminated-by "\t" --export-dir=${HiveHDFS}/weblog/ --table=weblog
 #
 #   Import weblog user agent information from HDFS
 #
-sqoop export --input-null-string '\\N' --input-null-non-string '\\N'  --connect jdbc:postgresql://localhost/ebags_weblog \
+sqoop export --input-null-string '\\N' --input-null-non-string '\\N'  --connect jdbc:postgresql://localhost/prod_cat_stats \
     --username hiveuser --input-fields-terminated-by "\t" --export-dir=${HiveHDFS}/weblog_user_agents/ \
     --table=weblog_user_agents
 #
 #   Import weblog bots and spiders information from HDFS
 #
-sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/ebags_weblog \
+sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/prod_cat_stats \
     --username hiveuser --input-fields-terminated-by "\t" --export-dir=${HiveHDFS}/user_agent_bots_spiders/ \
     --table=user_agent_bots_spiders
 #
 #   Import user agent exclusion information from HDFS
 #
-sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/ebags_weblog \
+sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/prod_cat_stats \
     --username hiveuser --input-fields-terminated-by "\t" --export-dir=${HiveHDFS}/user_agent_exclusion/ \
     --table=user_agent_exclusion
 #
 #   Import filtered weblog data from HDFS
 #
-sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/ebags_weblog \
+sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/prod_cat_stats \
     --username hiveuser --input-fields-terminated-by "\001" --export-dir=${HiveHDFS}/weblog_filtered/ \
     --table=weblog_filtered
 #
 #    Import visitor information from HDFS
 #
-sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/ebags_weblog \
+sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/prod_cat_stats \
     --username hiveuser --input-fields-terminated-by "\001" --export-dir=${HiveHDFS}/visitor_model_view/ \
     --table=visitor_model_view
 #
 #    Import visitor information with models from HDFS
 #
-sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/ebags_weblog \
+sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/prod_cat_stats \
     --username hiveuser --input-fields-terminated-by "\001" --export-dir=${HiveHDFS}/visitor_model_atc/ \
     --table=visitor_model_atc
