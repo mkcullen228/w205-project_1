@@ -155,7 +155,7 @@ The AMI image provided in the class does not have Apache Sqoop. We utilize this 
 git clone https://git-wip-us.apache.org/repos/asf/sqoop.git
 ```
 
-The command downloads the latest version of Sqoop, which in our case was version 1.5.0-SNAPSHOT. To built Sqoop binaries and documentation, one needs the Apache ANT, asciidoc and xmlto. The following procedure, if followed, will build a working Sqoop product on the UC Berkeley provided AMI image.
+The command downloads the latest version of Sqoop, which in our case was version 1.5.0-SNAPSHOT. **_We cloned Sqoop to the home directory of the user "w205". The rest of the directions presume Sqoop is installed there._** To built Sqoop binaries and documentation, one needs the Apache ANT, asciidoc and xmlto. The following procedure, if followed, will build a working Sqoop product on the UC Berkeley provided AMI image.
 
 1. A prebuilt version of Apache ANT for JRE version 1.7.0 can be downloaded and installed in the home directory for user w205. For our project, the ANT version that was appropriate was 1.9.9.
 2. The package asciidoc is readily available as a RPM package and can be installed using the command ```yum install -y asciidoc```.
@@ -163,6 +163,7 @@ The command downloads the latest version of Sqoop, which in our case was version
 4. The PATH environment variable should be set to include the ANT binaries.
 5. Follow the instructions provided in the COMPILING.txt file in the Sqoop directory to build Sqoop. The simplest way to do so is to execute ```ant package```. This will build everything including the documentation.
 6. Update the PATH variable to include the directory in which the sqoop binary resides. This was in our implementation ```/home/w205/sqoop/bin```.
+7. Copy or create a symbolic link from `/usr/lib/hive/lib/postgres-jdbc.jar` to `~w205/sqoop/lib/postgresql.jar`.
 
 ### Executing Sqoop to Populate the Postgresql Database
 
@@ -175,19 +176,29 @@ Once all the tools and the data is in place as described above, `sqoop`, can be 
 #
 #  It assumes
 #
-#   1. The database, ebags_weblog, has been created a priori
+#   1. The database, product_cat_stats, has been created a priori
 #   2. ANT is installed on the UCB provided AMI
 #   3. Packages, asciidoc and xmlto, has been installed on the image
 #   4. Sqoop version 1.5.0 has been downloaded from Apache github repository and compiled.
 #   5. Hive has been set up to use Postgres and the the weblog pipelining job has been executed.
 #
-#   Import the weblog data from HDFS
+#   Set the location of the Hive "warehouse" in HDFS.
 #
-sqoop export --input-null-string '\\N' --input-null-non-string '\\N' --connect jdbc:postgresql://localhost/ebags_weblog \
-       --username hiveuser --input-fields-terminated-by "\t" --export-dir=hdfs://localhost:8020/user/hive/warehouse/weblog/ --table=weblog
+#   **** THIS HAS TO BE CHANGED IF HIVE STORES ITS DATA IN A DIFFERENT LOCATION (OR MACHINE) ***
+#
+HiveHDFS = hdfs://localhost:8020/user/hive/warehouse
+#
+#   Next import weblog data from HDFS
+#
+sqoop export --input-null-string '\\N' --input-null-non-string '\\N' \
+       --connect jdbc:postgresql://localhost/ebags_weblog \
+       --username hiveuser --input-fields-terminated-by "\t" \
+       --export-dir=${HiveHDFS}/weblog/ --table=weblog
 ```
 
-It can be seen from the code that we are exporting information stored in files located in the HDFS directory, `/user/hive/warehouse/weblog` to the table `weblog` in the database `ebags_weblog`. Sqoop performs additional mapreduce jobs to transform the data generated from Hive and populates the database. It should be noted that the password for accessing the database is not shown in the command line. It is provided to Sqoop through the use of PGPASSFILE environment variable. Users should refer to Postgres version 8.4 documentation to understand how to use this variable.
+It can be seen from the code that we are exporting information stored in files located in the HDFS directory, `/user/hive/warehouse/weblog` to the table `weblog` in the database `product_cat_stats`. Note that for our implementation the HDFS directory in which Hive stores its data is `/user/hive/warehouse`. This might be different in other implementations. The variable `HiveHDFS` has to be updated to the appropriate value before the script is executed. 
+
+Sqoop performs additional mapreduce jobs to transform the data generated from Hive and populates the database. It should be noted that the password for accessing the database is not shown in the command line. It is provided to Sqoop through the use of PGPASSFILE environment variable. Users should refer to Postgres version 8.4 documentation to understand how to use this variable.
 
 In summary, our architecture involves multiple tools in our data pipelining and presents data in different formats for various use cases. In our vision, as new weblogs become available, the user would automatically process the new log using the Hive procedure (discussed in other documents) and store it in HDFS database for anyone to utilize. They would also run the Sqoop job cited above to transform the data into a relational database and store it in that format for rapid access to structured information.
 
