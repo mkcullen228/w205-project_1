@@ -101,14 +101,14 @@ There are a number of ways that one can utilize to create a database and the app
 -- It is presumed the user is starting the script logged on as user "postgres"
 -- We will create the database and transfer the ownership to user "hiveuser"
 --
-CREATE DATABASE ebags_weblog
+CREATE DATABASE product_cat_stats
        WITH OWNER = hiveuser;
 --
 -- Create tables in preparation for importing data from HDFS into postgres
 --
 -- The tables are created in the database we just created
 --
-\c ebags_weblog
+\c product_cat_stats
 ```
 
 creates the database and changes the owner to the user "hiveuser" that we used earlier on. In addition, notice the profuse use of comments in the SQL script to explain the logic behind the commands.
@@ -149,7 +149,7 @@ creates a table (```weblog```) with a prescribed schema (obtained from the Hive 
 
 ### Installing Sqoop and Appropriate Tools
 
-The AMI image provided in the class does not have Apache Sqoop. We utilize this tool to move the processed weblog data from the Hive job insto the "ebags_weblog" database created before. Apache Sqoop can be downloaded by cloning the Apache Github repository as shown below:
+The AMI image provided in the class does not have Apache Sqoop. We utilize this tool to move the processed weblog data from the Hive job insto the "product_cat_stats" database created before. Apache Sqoop can be downloaded by cloning the Apache Github repository as shown below:
 #
 ```
 git clone https://git-wip-us.apache.org/repos/asf/sqoop.git
@@ -191,7 +191,7 @@ HiveHDFS = hdfs://localhost:8020/user/hive/warehouse
 #   Next import weblog data from HDFS
 #
 sqoop export --input-null-string '\\N' --input-null-non-string '\\N' \
-       --connect jdbc:postgresql://localhost/ebags_weblog \
+       --connect jdbc:postgresql://localhost/product_cat_stats \
        --username hiveuser --input-fields-terminated-by "\t" \
        --export-dir=${HiveHDFS}/weblog/ --table=weblog
 ```
