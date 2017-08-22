@@ -4,14 +4,14 @@
 -- It is presumed the user is starting the script logged on as user "postgres"
 -- We will create the database and transfer the ownership to user "hiveuser"
 -- 
-CREATE DATABASE ebags_weblog
+CREATE DATABASE product_cat_stats
        WITH OWNER = hiveuser;
 --
 -- Create tables in preparation for importing data from HDFS into postgres
 --
 -- The tables are created in the database we just created
 --
-\c ebags_weblog
+\c product_cat_stats
 --
 --  The weblog table
 --
